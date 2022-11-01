@@ -11,18 +11,19 @@ wiringpi.mcp23017Setup(pin_base, i2c_addr)   # set up the pins and i2c address
 
 for p in range(mcp_base, mcp_base+8):
     wiringpi.pinMode(p, 1)         # sets GPA0 to output
-    wiringpi.digitalWrite(p, 0)    # sets GPA0 to 0 (0V, off)
+    wiringpi.digitalWrite(p, 1)    # sets GPA0 to 0 (0V, off)
 
 try:
-    chan = 0
     while True:
-        print("On: %d" % chan)
-        wiringpi.digitalWrite(mcp_base+chan, 1)
-        sleep(4)
-        print("Off: %d" % chan)
-        wiringpi.digitalWrite(mcp_base+chan, 0)
+        for chan in range(mcp_base, mcp_base+8):
+            print("On: %d" % (chan-pin_base-7))
+            wiringpi.digitalWrite(chan, 0)
+            sleep(1)
+            print("Off: %d" % chan)
+            wiringpi.digitalWrite(chan, 1)
+
 
 finally:
     for p in range(mcp_base, mcp_base+8):
         wiringpi.pinMode(p, 0)         # sets GPA0 to output
-        wiringpi.digitalWrite(p, 0)    # sets GPA0 to 0 (0V, off)
+        wiringpi.digitalWrite(p, 1)    # sets GPA0 to 0 (0V, off)
